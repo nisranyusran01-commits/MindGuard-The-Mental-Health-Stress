@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MindGuard - Mental Health Shield</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins',sans-serif;
+    }
+
+    body{
+      background:linear-gradient(135deg,#0f172a,#1e293b,#312e81);
+      color:white;
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    header{
+      padding:30px;
+      text-align:center;
+    }
+
+    header h1{
+      font-size:3rem;
+      color:#7dd3fc;
+    }
+
+    header p{
+      color:#cbd5e1;
+      margin-top:10px;
+    }
+
+    .container{
+      width:90%;
+      max-width:1200px;
+      margin:auto;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      gap:25px;
+      padding-bottom:50px;
+    }
+
+    .card{
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(10px);
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:20px;
+      padding:25px;
+      transition:0.3s;
+      box-shadow:0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 15px 25px rgba(0,0,0,0.4);
+    }
+
+    .card h2{
+      margin-bottom:15px;
+      color:#67e8f9;
+      font-size:1.4rem;
+    }
+
+    button{
+      background:linear-gradient(135deg,#06b6d4,#3b82f6);
+      border:none;
+      color:white;
+      padding:12px 20px;
+      border-radius:12px;
+      cursor:pointer;
+      margin-top:15px;
+      font-weight:600;
+      transition:0.3s;
+    }
+
+    button:hover{
+      transform:scale(1.05);
+    }
+
+    textarea,input,select{
+      width:100%;
+      padding:12px;
+      border:none;
+      border-radius:12px;
+      margin-top:10px;
+      background:#e2e8f0;
+      color:#111827;
+    }
+
+    .mood-options{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:15px;
+    }
+
+    .mood{
+      background:#1e293b;
+      padding:10px 15px;
+      border-radius:12px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .mood:hover{
+      background:#06b6d4;
+    }
+
+    .result{
+      margin-top:15px;
+      font-weight:bold;
+      color:#facc15;
+    }
+
+    .panic{
+      background:linear-gradient(135deg,#ef4444,#dc2626);
+      width:100%;
+      font-size:1.1rem;
+      animation:pulse 1s infinite;
+    }
+
+    @keyframes pulse{
+      0%{transform:scale(1);}
+      50%{transform:scale(1.03);}
+      100%{transform:scale(1);}
+    }
+
+    .dashboard{
+      display:flex;
+      justify-content:space-between;
+      margin-top:15px;
+    }
+
+    .stat{
+      background:#0f172a;
+      padding:15px;
+      border-radius:15px;
+      width:30%;
+      text-align:center;
+    }
+
+    footer{
+      text-align:center;
+      padding:30px;
+      color:#cbd5e1;
+    }
+
+    .tag{
+      display:inline-block;
+      background:#0ea5e9;
+      padding:5px 12px;
+      border-radius:999px;
+      margin-bottom:10px;
+      font-size:0.8rem;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🛡 MindGuard</h1>
+  <p>The Mental Health & Stress Shield For Students</p>
+</header>
+
+<div class="container">
+
+  <!-- 1 Mood Tracker -->
+  <div class="card">
+    <div class="tag">Mood Tracker</div>
+    <h2>😊 Mood Harian</h2>
+
+    <p>Pilih perasaan kamu hari ini:</p>
+
+    <div class="mood-options">
+      <div class="mood" onclick="setMood('Bahagia 😊')">😊</div>
+      <div class="mood" onclick="setMood('Sedih 😢')">😢</div>
+      <div class="mood" onclick="setMood('Stress 😫')">😫</div>
+      <div class="mood" onclick="setMood('Lelah 😴')">😴</div>
+      <div class="mood" onclick="setMood('Cemas 😰')">😰</div>
+    </div>
+
+    <div class="result" id="moodResult"></div>
+  </div>
+
+  <!-- 2 Burnout Test -->
+  <div class="card">
+    <div class="tag">Burnout Detection</div>
+    <h2>🧠 Tes Burnout</h2>
+
+    <label>Seberapa lelah kamu belajar?</label>
+    <input type="range" min="1" max="10" id="burnoutRange">
+
+    <button onclick="checkBurnout()">Cek Burnout</button>
+
+    <div class="result" id="burnoutResult"></div>
+  </div>
+
+  <!-- 3 Curhat -->
+  <div class="card">
+    <div class="tag">Anonymous Room</div>
+    <h2>💬 Curhat Anonim</h2>
+
+    <textarea id="curhat"
+      rows="5"
+      placeholder="Tulis apa yang kamu rasakan..."></textarea>
+
+    <button onclick="sendCurhat()">Kirim Curhat</button>
+
+    <div class="result" id="curhatResult"></div>
+  </div>
+
+  <!-- 4 Panic Button -->
+  <div class="card">
+    <div class="tag">Emergency Help</div>
+    <h2>🚨 Panic Button</h2>
+
+    <p>Tekan tombol jika kamu sedang sangat stres atau butuh bantuan.</p>
+
+    <button class="panic" onclick="panicAlert()">
+      SAYA BUTUH BANTUAN
+    </button>
+  </div>
+
+  <!-- 5 AI Stress -->
+  <div class="card">
+    <div class="tag">AI Analyzer</div>
+    <h2>🤖 AI Stress Analyzer</h2>
+
+    <textarea id="aiText"
+      rows="5"
+      placeholder="Ceritakan kondisi kamu..."></textarea>
+
+    <button onclick="analyzeStress()">Analisis Stress</button>
+
+    <div class="result" id="aiResult"></div>
+  </div>
+
+  <!-- 6 Dashboard -->
+  <div class="card">
+    <div class="tag">BK Dashboard</div>
+    <h2>📊 Dashboard Guru BK</h2>
+
+    <div class="dashboard">
+
+      <div class="stat">
+        <h3>32</h3>
+        <p>Stress Tinggi</p>
+      </div>
+
+      <div class="stat">
+        <h3>18</h3>
+        <p>Burnout</p>
+      </div>
+
+      <div class="stat">
+        <h3>45</h3>
+        <p>Butuh Konseling</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 7 Parent Pressure -->
+  <div class="card">
+    <div class="tag">Parent Pressure</div>
+    <h2>👨‍👩‍👧 Tekanan Orang Tua</h2>
+
+    <label>Seberapa besar tekanan yang kamu rasakan?</label>
+
+    <select id="pressure">
+      <option>Rendah</option>
+      <option>Sedang</option>
+      <option>Tinggi</option>
+    </select>
+
+    <button onclick="checkPressure()">Kirim</button>
+
+    <div class="result" id="pressureResult"></div>
+  </div>
+
+</div>
+
+<footer>
+  © 2026 MindGuard | Mental Health Support System
+</footer>
+
+<script>
+
+  // Mood Tracker
+  function setMood(mood){
+    document.getElementById("moodResult").innerHTML =
+      "Mood kamu hari ini: " + mood;
+  }
+
+  // Burnout
+  function checkBurnout(){
+    let score = document.getElementById("burnoutRange").value;
+
+    if(score <= 3){
+      document.getElementById("burnoutResult").innerHTML =
+      "✅ Kondisi masih aman.";
+    }
+    else if(score <= 7){
+      document.getElementById("burnoutResult").innerHTML =
+      "⚠ Kamu mulai mengalami burnout sedang.";
+    }
+    else{
+      document.getElementById("burnoutResult").innerHTML =
+      "🚨 Burnout tinggi! Segera konsultasi ke BK.";
+    }
+  }
+
+  // Curhat
+  function sendCurhat(){
+    document.getElementById("curhatResult").innerHTML =
+    "💙 Curhat berhasil dikirim secara anonim.";
+  }
+
+  // Panic
+  function panicAlert(){
+    alert("🚨 Notifikasi telah dikirim ke Guru BK!");
+  }
+
+  // AI Stress
+  function analyzeStress(){
+
+    let text =
+      document.getElementById("aiText").value.toLowerCase();
+
+    let result = "";
+
+    if(
+      text.includes("capek") ||
+      text.includes("lelah") ||
+      text.includes("stres")
+    ){
+      result =
+      "⚠ AI mendeteksi tingkat stress tinggi.";
+    }
+    else{
+      result =
+      "✅ Kondisi emosional masih stabil.";
+    }
+
+    document.getElementById("aiResult").innerHTML = result;
+  }
+
+  // Parent Pressure
+  function checkPressure(){
+
+    let pressure =
+      document.getElementById("pressure").value;
+
+    document.getElementById("pressureResult").innerHTML =
+      "📌 Tingkat tekanan: " + pressure;
+  }
+
+</script>
+
+</body>
+</html>
